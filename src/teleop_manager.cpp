@@ -5,23 +5,25 @@ TeleopManager::TeleopManager(): private_nh_("~")
     // params
     private_nh_.param<float>("max_velocity", max_velocity_, 1.0); // m/s
     private_nh_.param<float>("max_yawrate", max_yawrate_, 1.0); // m/s
-    private_nh_.param<int>("hz", hz_, 50);
+    private_nh_.param<int>("hz", hz_, 10);
 
     // publisher
-    pub_cmd_vel_ = nh_.advertise<geometry_msgs::Twist>("/cmb_vel",1,true);
+    pub_cmd_vel_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel",1,true);
 
     // subscriber
-    sub_joy_ = nh_.subscribe("/joy",1,&TeleopManager::joy_callback,this);
-    sub_emergency_stop_ = nh_.subscribe("/emergency_stop",1,&TeleopManager::emergency_stop_callback,this);
-    sub_local_path_cmd_vel_ = nh_.subscribe("/local_path_cmd_vel",1,&TeleopManager::local_path_vel_callback,this);
-    sub_visual_path_cmd_vel_ = nh_.subscribe("/visual_path_cmd_vel",1,&TeleopManager::visual_path_vel_callback,this);
-
+    sub_joy_ = nh_.subscribe("/joy",10,&TeleopManager::joy_callback,this);
+    sub_emergency_stop_ = nh_.subscribe("/emergency_stop",10,&TeleopManager::emergency_stop_callback,this);
+    sub_local_path_cmd_vel_ = nh_.subscribe("/local_path_cmd_vel",10,&TeleopManager::local_path_vel_callback,this);
+    sub_visual_path_cmd_vel_ = nh_.subscribe("/visual_path_cmd_vel",10,&TeleopManager::visual_path_vel_callback,this);
+    mode_ = 2;
 }
 
 void TeleopManager::joy_callback(const sensor_msgs::Joy::ConstPtr &msg)
 {
+    std::cout<<"joy callback"<<std::endl;
     mode_ = select_mode(msg, mode_);
-    if(msg->buttons[8] == 1) // press L1 button
+    std::cout<<mode_<<std::endl;
+    if(msg->buttons[4] == 1) // press L1 button
     {
         joy_vel_.linear.x = msg->axes[1] * max_velocity_;
         joy_vel_.angular.z = msg->axes[0] * max_yawrate_;
@@ -62,7 +64,7 @@ int TeleopManager::select_mode(const sensor_msgs::JoyConstPtr &msg, int mode)
     if(msg->buttons[0] == 1) new_mode = 1; // A button
     if(msg->buttons[1] == 1) new_mode = 2; // B button
     if(msg->buttons[3] == 1) new_mode = 3; // Y button
-    if(msg->buttons[6] == 1) new_mode = 4; // Center Circle button
+    if(msg->buttons[8] == 1) new_mode = 4; // Center Circle button
     return new_mode;
 }
 
@@ -100,8 +102,9 @@ void TeleopManager::process()
             if(get_visual_path_vel_) final_vel = visual_vel_;
             else std::cout<<"No visual_path cmd_vel"<<std::endl;
         }
-        print_info(final_vel);
+        // print_info(final_vel);
         pub_cmd_vel_.publish(final_vel);
+        std::cout<<"get_joy: "<<get_joy_<<std::endl;
     }
     loop_rate.sleep();
     ros::spinOnce();
@@ -109,7 +112,7 @@ void TeleopManager::process()
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "teleop_anager");
+    ros::init(argc, argv, "teleop_manager");
     TeleopManager teleop_manager;
     teleop_manager.process();
     return 0;

@@ -49,6 +49,4 @@ class TeleopManager
         //publisher
         ros::Publisher pub_cmd_vel_;
 };
-
-
 #endif
