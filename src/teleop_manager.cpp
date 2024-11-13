@@ -20,9 +20,7 @@ TeleopManager::TeleopManager(): private_nh_("~")
 
 void TeleopManager::joy_callback(const sensor_msgs::Joy::ConstPtr &msg)
 {
-    std::cout<<"joy callback"<<std::endl;
     mode_ = select_mode(msg, mode_);
-    std::cout<<mode_<<std::endl;
     if(msg->buttons[4] == 1) // press L1 button
     {
         joy_vel_.linear.x = msg->axes[1] * max_velocity_;
@@ -77,7 +75,7 @@ void TeleopManager::print_info(geometry_msgs::Twist vel)
     else if(mode_ == 4) mode_str = "auto(combi)";
 
     std::cout<<"===== "<< mode_str <<" ====="<<std::endl;
-    std::cout<<"linear_x:  "<< vel.linear.x <<std::endl;
+    std::cout<<"linear_x : "<< vel.linear.x <<std::endl;
     std::cout<<"angular_z: "<< vel.angular.z <<std::endl;
 }
 void TeleopManager::process()
@@ -102,12 +100,14 @@ void TeleopManager::process()
             if(get_visual_path_vel_) final_vel = visual_vel_;
             else std::cout<<"No visual_path cmd_vel"<<std::endl;
         }
-        // print_info(final_vel);
+        print_info(final_vel);
         pub_cmd_vel_.publish(final_vel);
-        std::cout<<"get_joy: "<<get_joy_<<std::endl;
+
+        get_joy_ = get_local_path_vel_ = get_visual_path_vel_ = 0;
+
+        ros::spinOnce();
+        loop_rate.sleep();
     }
-    loop_rate.sleep();
-    ros::spinOnce();
 }
 
 int main(int argc, char** argv)
