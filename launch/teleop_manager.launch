@@ -1,1 +1,15 @@
-<?xml_version="1.0"?>
+<?xml version="1.0"?>
+<launch>
+    <arg name="max_velocity" default="1.0"/>
+    <arg name="max_yawrate" default="1.0"/>
+    <arg name="manager_hz" default="50"/>
+
+    <node name="joy" pkg="joy" type="joy_node"/>
+    <node name="teleop_manager" pkg="teleop_manager" type="teleop_manager" output="screen">
+        <param name="max_velocity" value="$(arg max_velocity)"/>
+        <param name="max_yawrate" value="$(arg max_yawrate)"/>
+        <param name="hz" value="$(arg manager_hz)"/>
+        <remap from="/cmd_vel" to="turtle1/cmd_vel"/>
+    </node>
+</launch>
+

@@ -15,7 +15,6 @@ TeleopManager::TeleopManager(): private_nh_("~")
     sub_emergency_stop_ = nh_.subscribe("/emergency_stop",10,&TeleopManager::emergency_stop_callback,this);
     sub_local_path_cmd_vel_ = nh_.subscribe("/local_path_cmd_vel",10,&TeleopManager::local_path_vel_callback,this);
     sub_visual_path_cmd_vel_ = nh_.subscribe("/visual_path_cmd_vel",10,&TeleopManager::visual_path_vel_callback,this);
-    mode_ = 2;
 }
 
 void TeleopManager::joy_callback(const sensor_msgs::Joy::ConstPtr &msg)
