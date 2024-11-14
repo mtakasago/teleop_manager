@@ -58,9 +58,9 @@ int TeleopManager::select_mode(const sensor_msgs::JoyConstPtr &msg, int mode)
 
     int new_mode = mode;
     if(msg->buttons[2] == 1) new_mode = 0; // X button
-    if(msg->buttons[0] == 1) new_mode = 1; // A button
-    if(msg->buttons[1] == 1) new_mode = 2; // B button
-    if(msg->buttons[3] == 1) new_mode = 3; // Y button
+    if(msg->buttons[3] == 1) new_mode = 1; // Y button
+    if(msg->buttons[0] == 1) new_mode = 2; // A button
+    if(msg->buttons[1] == 1) new_mode = 3; // B button
     if(msg->buttons[8] == 1) new_mode = 4; // Center Circle button
     return new_mode;
 }
