@@ -11,6 +11,6 @@
         <param name="hz" value="$(arg manager_hz)"/>
         <remap from="/cmd_vel" to="turtle1/cmd_vel"/>
     </node>
-    <node name="turtle1" pkg="turtrlesim" type="turtrlesim_node"/>
+    <node name="turtle1" pkg="turtlesim" type="turtlesim_node"/>
 </launch>
 
