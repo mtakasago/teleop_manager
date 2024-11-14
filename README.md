@@ -20,6 +20,10 @@ joy-con  `sudo apt install ros-noetic-joy`
 `roslaunch teleop_manager turtle_test.launch`
 
 ## Description
+### Publish
+geometry_msgs/Twist型：`/cmd_vel`
+
+### Modes
 **manual mode**
 
 - 入り方：**Yボタン**
