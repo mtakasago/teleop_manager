@@ -3,7 +3,8 @@
 TeleopManager::TeleopManager():Node("teleop_manager_node")
 {
     // params
-    max_velocity_ = this->declare_parameter<float>("max_velocity", 1.0); // m/s
+    max_x_velocity_ = this->declare_parameter<float>("max_x_velocity", 1.0); // m/s
+    max_y_velocity_ = this->declare_parameter<float>("max_y_velocity", 1.0); // m/s
     max_yawrate_ = this->declare_parameter<float>("max_yawrate", 1.0); // m/s
     hz_ = this->declare_parameter<int>("hz", 10);
 
@@ -34,8 +35,8 @@ void TeleopManager::joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg)
     mode_ = select_mode(msg, mode_);
     if(msg->buttons[4] == 1) // press L1 button
     {
-        joy_vel_.linear.x = msg->axes[1] * max_velocity_;
-        joy_vel_.linear.y = msg->axes[3] * max_velocity_;
+        joy_vel_.linear.x = msg->axes[1] * max_x_velocity_;
+        joy_vel_.linear.y = msg->axes[3] * max_y_velocity_;
         joy_vel_.angular.z = msg->axes[0] * max_yawrate_;
     }
     else joy_vel_ = geometry_msgs::msg::Twist();

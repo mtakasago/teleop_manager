@@ -26,7 +26,8 @@ class TeleopManager : public rclcpp::Node
 
         //param
         int mode_;
-        float max_velocity_;
+        float max_x_velocity_;
+        float max_y_velocity_;
         float max_yawrate_;
 
         //flags
