@@ -4,7 +4,22 @@
     <node name="rover serial" pkg="micro_ros_agent" exec="micro_ros_agent" args="serial --dev /dev/rover -v4"/>
     <node name="publish odom" pkg="mecanumrover3_bringup" exec="pub_odom"/>
     <!-- joycon -->
-    <include file="$(find teleop_manager)/launch/teleop_manager.launch.xml"/>
+    <arg name="max_x" default="0.8"/>
+    <arg name="max_y" default="0.4"/>
+    <arg name="max_auto" default="0.4"/>
+    <arg name="max_yawrate" default="0.8"/>
+    <arg name="stop_dist" default="1.0"/>
+    <arg name="output" default="screen"/>
+    <node name="teleop_manager" pkg="teleop_manager" exec="teleop_manager_node" output="$(var output)">
+        <param name="max_x_velocity" value="$(var max_x)"/>
+        <param name="max_y_velocity" value="$(var max_y)"/>
+        <param name="max_yawrate" value="$(var max_yawrate)"/>
+        <param name="max_auto_velocity" value="$(var max_auto)"/>
+    </node>
+    <node name="joy" pkg="joy" exec="joy_node"/>
+    <node name="safety_stopper" pkg="safety_stopper" exec="safety_stopper_node">
+        <param name="stop_dist" value="$(var stop_dist)"/>
+    </node>
     <!-- lidar -->
     <include file="$(find ydlidar_ros2_driver)/launch/ydlidar.launch.py"/>
     <!-- Realsense -->
