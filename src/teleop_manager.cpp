@@ -5,6 +5,7 @@ TeleopManager::TeleopManager():Node("teleop_manager_node")
     // params
     max_x_velocity_ = this->declare_parameter<float>("max_x_velocity", 1.0); // m/s
     max_y_velocity_ = this->declare_parameter<float>("max_y_velocity", 1.0); // m/s
+    max_auto_velocity_ = this->declare_parameter<float>("max_auto_velocity", 1.0); // m/s
     max_yawrate_ = this->declare_parameter<float>("max_yawrate", 1.0); // m/s
     hz_ = this->declare_parameter<int>("hz", 10);
 
@@ -52,12 +53,16 @@ void TeleopManager::emergency_stop_callback(const std_msgs::msg::Bool::SharedPtr
 void TeleopManager::local_path_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg)
 {
     local_vel_ = *msg;
+    local_vel_.linear.x = std::min(msg->linear.x, max_auto_velocity_);
+    local_vel_.linear.y = std::min(msg->linear.y, max_auto_velocity_);
     get_local_path_vel_ = true;
 }
 
 void TeleopManager::visual_path_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg)
 {
     visual_vel_ = *msg;
+    visual_vel_.linear.x = std::min(msg->linear.x, max_auto_velocity_);
+    visual_vel_.linear.y = std::min(msg->linear.y, max_auto_velocity_);
     get_visual_path_vel_ = true;
 }
 

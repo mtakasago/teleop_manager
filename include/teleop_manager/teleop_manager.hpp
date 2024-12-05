@@ -4,6 +4,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <functional>
 #include <memory>
+#include <cmath>
 #include <sensor_msgs/msg/joy.hpp>
 #include <std_msgs/msg/bool.hpp>
 #include <geometry_msgs/msg/twist.hpp>
@@ -29,6 +30,7 @@ class TeleopManager : public rclcpp::Node
         float max_x_velocity_;
         float max_y_velocity_;
         float max_yawrate_;
+        double max_auto_velocity_;
 
         //flags
         bool stop_flag_ = 0;
