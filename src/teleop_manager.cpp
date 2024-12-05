@@ -53,16 +53,16 @@ void TeleopManager::emergency_stop_callback(const std_msgs::msg::Bool::SharedPtr
 void TeleopManager::local_path_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg)
 {
     local_vel_ = *msg;
-    local_vel_.linear.x = std::min(msg->linear.x, max_auto_velocity_);
-    local_vel_.linear.y = std::min(msg->linear.y, max_auto_velocity_);
+    local_vel_.linear.x = std::min(float(msg->linear.x), max_auto_velocity_);
+    local_vel_.linear.y = std::min(float(msg->linear.y), max_auto_velocity_);
     get_local_path_vel_ = true;
 }
 
 void TeleopManager::visual_path_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg)
 {
     visual_vel_ = *msg;
-    visual_vel_.linear.x = std::min(msg->linear.x, max_auto_velocity_);
-    visual_vel_.linear.y = std::min(msg->linear.y, max_auto_velocity_);
+    visual_vel_.linear.x = std::min(float(msg->linear.x), max_auto_velocity_);
+    visual_vel_.linear.y = std::min(float(msg->linear.y), max_auto_velocity_);
     get_visual_path_vel_ = true;
 }
 
