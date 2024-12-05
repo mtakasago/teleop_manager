@@ -35,6 +35,7 @@ void TeleopManager::joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg)
     if(msg->buttons[4] == 1) // press L1 button
     {
         joy_vel_.linear.x = msg->axes[1] * max_velocity_;
+        joy_vel_.linear.y = msg->axes[3] * max_velocity_;
         joy_vel_.angular.z = msg->axes[0] * max_yawrate_;
     }
     else joy_vel_ = geometry_msgs::msg::Twist();
@@ -81,12 +82,13 @@ void TeleopManager::print_info(geometry_msgs::msg::Twist vel)
 {
     std::string mode_str = "stop";
     if(mode_ == 1) mode_str = "manual";
-    else if(mode_ == 2) mode_str = "auto(local)";
+    else if(mode_ == 2) mode_str = "auto(lidar)";
     else if(mode_ == 3) mode_str = "auto(visual)";
     else if(mode_ == 4) mode_str = "auto(combi)";
 
     std::cout<<"===== "<< mode_str <<" ====="<<std::endl;
     std::cout<<"linear_x : "<< vel.linear.x <<std::endl;
+    std::cout<<"linear_y : "<< vel.linear.y <<std::endl;
     std::cout<<"angular_z: "<< vel.angular.z <<std::endl;
 }
 void TeleopManager::process()
