@@ -100,7 +100,7 @@ void TeleopManager::print_info(geometry_msgs::msg::Twist vel)
 void TeleopManager::process()
 {
         auto final_vel = geometry_msgs::msg::Twist();
-        if(stop_flag_ || mode_ == 0) final_vel = geometry_msgs::msg::Twist();
+        if((stop_flag_ && mode_ != 1) || mode_ == 0) final_vel = geometry_msgs::msg::Twist();
         else if(mode_ == 1)
         {
             if(get_joy_) final_vel = joy_vel_;
