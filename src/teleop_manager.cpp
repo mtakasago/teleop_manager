@@ -86,8 +86,9 @@ int TeleopManager::select_mode(const sensor_msgs::msg::Joy::SharedPtr msg, int m
 
 bool TeleopManager::collision_flag(geometry_msgs::msg::Twist vel)
 {
+    std::cout<<"hit_vel: [ "<<hit_vel_.linear.x<<", "<<hit_vel_.linear.y<<", "<<hit_vel_.angular.z<<"]"<<std::endl;
     // ぶつかる直前の速度と向きが違うならOK
-    return (hit_vel_.linear.x * vel.linear.x < 0 || hit_vel_.linear.y * vel.linear.y < 0 || hit_vel_.angular.z * vel.angular.z < 0);
+    return (hit_vel_.linear.x * vel.linear.x > 0 || hit_vel_.linear.y * vel.linear.y > 0 || hit_vel_.angular.z * vel.angular.z > 0);
 }
 
 void TeleopManager::print_info(geometry_msgs::msg::Twist vel)

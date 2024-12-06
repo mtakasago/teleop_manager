@@ -8,7 +8,7 @@
     <arg name="max_y" default="0.4"/>
     <arg name="max_auto" default="0.4"/>
     <arg name="max_yawrate" default="0.8"/>
-    <arg name="stop_dist" default="1.0"/>
+    <arg name="stop_dist" default="0.5"/>
     <arg name="output" default="screen"/>
     <node name="teleop_manager" pkg="teleop_manager" exec="teleop_manager_node" output="$(var output)">
         <param name="max_x_velocity" value="$(var max_x)"/>
