@@ -36,13 +36,14 @@ void TeleopManager::joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg)
     mode_ = select_mode(msg, mode_);
     if(msg->buttons[4] == 1) // press L1 button
     {
-        //その場旋回
-        joy_vel_.angular.z = (1.0 - msg->axes[2]) / 2.0 * max_yawrate_;
-        joy_vel_.angular.z = (1.0 - msg->axes[5]) / 2.0 * max_yawrate_;
         //並進＋旋回
         joy_vel_.linear.x = msg->axes[1] * max_x_velocity_;
         joy_vel_.linear.y = msg->axes[3] * max_y_velocity_;
         joy_vel_.angular.z = msg->axes[0] * max_yawrate_;
+        //その場旋回
+	if(msg->axes[0] == 0 && msg->axes[2] != 1.0) joy_vel_.angular.z = (1.0 - msg->axes[2]) / 2.0 * max_yawrate_;
+	if(msg->axes[0] == 0 && msg->axes[5] != 1.0) joy_vel_.angular.z = -(1.0 - msg->axes[5]) / 2.0 * max_yawrate_;
+	
     }
     else joy_vel_ = geometry_msgs::msg::Twist();
 
