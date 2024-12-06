@@ -84,6 +84,12 @@ int TeleopManager::select_mode(const sensor_msgs::msg::Joy::SharedPtr msg, int m
     return new_mode;
 }
 
+bool TeleopManager::collision_flag(geometry_msgs::msg::Twist vel)
+{
+    // ぶつかる直前の速度と向きが違うならOK
+    return (hit_vel_.linear.x * vel.linear.x < 0 || hit_vel_.linear.y * vel.linear.y < 0 || hit_vel_.angular.z * vel.angular.z < 0);
+}
+
 void TeleopManager::print_info(geometry_msgs::msg::Twist vel)
 {
     std::string mode_str = "stop";
@@ -100,7 +106,11 @@ void TeleopManager::print_info(geometry_msgs::msg::Twist vel)
 void TeleopManager::process()
 {
         auto final_vel = geometry_msgs::msg::Twist();
-        if((stop_flag_ && mode_ != 1) || mode_ == 0) final_vel = geometry_msgs::msg::Twist();
+        if(stop_flag_ || mode_ == 0)
+        {
+            if(mode_ == 1 && !collision_flag(joy_vel_)) final_vel = joy_vel_;
+            else final_vel = geometry_msgs::msg::Twist();
+        }
         else if(mode_ == 1)
         {
             if(get_joy_) final_vel = joy_vel_;
@@ -118,6 +128,7 @@ void TeleopManager::process()
         }
         print_info(final_vel);
         pub_cmd_vel_->publish(final_vel);
+        if(!stop_flag_) hit_vel_ = final_vel;
 
         get_joy_ = get_local_path_vel_ = get_visual_path_vel_ = 0;
 }

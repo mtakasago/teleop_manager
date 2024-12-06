@@ -23,6 +23,7 @@ class TeleopManager : public rclcpp::Node
         void local_path_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg);
         void visual_path_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg);
         int select_mode(const sensor_msgs::msg::Joy::SharedPtr msg, int mode);
+        bool collision_flag(geometry_msgs::msg::Twist vel);
         void print_info(geometry_msgs::msg::Twist vel);
 
         //param
@@ -42,6 +43,7 @@ class TeleopManager : public rclcpp::Node
         geometry_msgs::msg::Twist joy_vel_;
         geometry_msgs::msg::Twist local_vel_;
         geometry_msgs::msg::Twist visual_vel_;
+        geometry_msgs::msg::Twist hit_vel_;
 
         //subscriber
         rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
