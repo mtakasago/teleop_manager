@@ -6,13 +6,14 @@
     <arg name="max_auto" default="0.4"/>
     <arg name="max_yawrate" default="0.8"/>
     <arg name="output" default="screen"/>
+    <arg name="cmd_vel_topic" default="cmd_vel"/> <!-- for rover: rover_twist -->
 
     <node name="teleop_manager" pkg="teleop_manager" exec="teleop_manager_node" output="$(var output)">
         <param name="max_x_velocity" value="$(var max_x)"/>
         <param name="max_y_velocity" value="$(var max_y)"/>
         <param name="max_yawrate" value="$(var max_yawrate)"/>
         <param name="max_auto_velocity" value="$(var max_auto)"/>
-	<remap from="cmd_vel" to="rover_twist"/>
+        <remap from="cmd_vel" to="$(var cmd_vel_topic)"/>
     </node>
 
     <node name="joy" pkg="joy" exec="joy_node"/>

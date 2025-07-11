@@ -14,8 +14,14 @@ ament_auto_find_build_dependencies()
 # find_package(sensor_msgs REQUIRED)
 # find_package(std_msgs REQUIRED)
 
-ament_auto_add_executable(${PROJECT_NAME}_node
+ament_auto_add_executable(teleop_manager_node
     src/teleop_manager.cpp
+)
+ament_auto_add_executable(goal_pose_to_twist_node
+    src/goal_pose_to_twist.cpp
+)
+ament_auto_add_executable(dummy_goal_node
+    src/dummy_goal.cpp
 )
 
 ament_auto_package()
